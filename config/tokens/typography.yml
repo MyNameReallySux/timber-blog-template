@@ -1,0 +1,34 @@
+font:
+  family:
+    #######################################
+    # Fonts from https://fonts.google.com/
+    # Pairing from http://fontpair.co/ 
+    #######################################
+    body: ['"Source Sans Pro"', 'sans-serif']
+    header: ['"Oxygen"', 'sans-serif']
+    logo: ['"Alegreya"', 'serif']
+  size: 
+    #######################################
+    # Major Third Scale - 1.250
+    # Calculated from http://type-scale.com/
+    ######################################
+    base: '16px'
+    enormous: '2.441rem'
+    gigantic: '1.953rem'
+    huge: '1.563rem'
+    large: '1.25rem'
+    normal: '1rem'
+    small: '0.8rem'
+    tiny: '0.64rem'
+    miniscule: '0.512rem'
+  line-height:
+    enormous: 1.45
+    gigantic: 1.45
+    huge: 1.45
+    large: 1.45
+    normal: 1.45
+    small: 1.45
+    tiny: 1.45
+    miniscule: 1.45
+
+

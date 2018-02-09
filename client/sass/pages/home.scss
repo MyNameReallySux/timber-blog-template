@@ -1,0 +1,117 @@
+@import '../core/manifest';
+
+$banner-overlay-color: $color-inverse;
+
+$line-box_text-color: $color-primary;
+$line-box-2_text-color: $color-secondary;
+$line-box-3_text-color: $color-tertiary;
+
+/* ##############################
+	Home Page
+############################## */
+
+#Home_Banner {
+	height: 60vh;
+	position: relative;
+	padding: 0;
+	overflow: hidden;
+	border-bottom: solid 1px $color-black;
+	margin-bottom: -($space-enormous * 2);
+
+	// .background {
+	// 	background-image: url('#{$WP_IMAGES}/default-header-background.jpg');
+	// 	background-position: center 30%;
+	// 	background-size: cover;
+	// 	z-index: 1;
+	// 	@include size(100%);
+	// 	@include position(absolute 50% 50%);
+	// 	@include center('both');
+	// }
+
+	.background {
+		background-image: url('#{$WP_IMAGES}/default-header-background.jpg');
+		background-size: cover;
+		background-position: center 15%;
+		width: 100%;
+		height: 120%;
+		@include position(absolute);
+	}
+
+	.overlay {
+		content: "";
+		background-color: rgba($banner-overlay-color, 0.5);
+		z-index: 2;
+		@include size(100%);
+		@include position(absolute 50% 50%);
+		@include center('both');
+	}
+}
+
+.home-main-section {
+	position: relative;
+	padding-top: 0px;	
+	@include make-container;
+
+	display: grid;
+
+	grid-template-columns: 5fr 2fr;
+	grid-template-rows: repeat(4, auto);
+	grid-template-areas: 
+		"main sidebar-blog"
+		"main sidebar-personal"
+		"main ..."
+		"footer footer";
+
+	grid-column-gap: $gutter-width;
+	grid-row-gap: $gutter-width;
+
+	> * {
+		@include color(inherit, $color-white);	
+		padding: $space-gigantic $space-gigantic $space-large;
+		box-shadow: 0 0 2px rgba($color-dark-grey, 0.25);
+	}
+}
+
+.posts {
+	grid-area: main
+}
+
+.sidebar-personal {
+	grid-area: sidebar-personal
+}
+
+.sidebar-blog {
+	grid-area: sidebar-blog
+}
+
+.sidebar > * {
+	padding: $space-small 0;
+
+	&:first-child {
+		padding-top: 0px;
+	}
+	
+	> h5 {
+		text-align: center;
+		font-weight: bold;
+		text-transform: uppercase;
+		font-size: $font-size-small;
+
+		&:before, &:after {
+			@include pseudo();
+			border-bottom: dotted 1px $color-dark-grey;
+		}
+
+		&:before {
+			margin-bottom: $space-default;
+		}
+
+		&:after {
+			margin-top: $space-default;
+		}
+	}
+}
+
+.posts-footer {
+	grid-area: footer
+}

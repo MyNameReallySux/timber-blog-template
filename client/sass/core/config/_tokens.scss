@@ -1,0 +1,135 @@
+// ####################################
+//  YAML to Vars
+//
+//  This file contains all vars and functions
+//  set from .yml token files
+// ####################################
+
+// space.yml
+@import 'space.yml';
+
+@function _space($keys...) {
+    @return map-deep-get($space, $keys...);
+}
+
+$space-default: 	_space(default);
+$space-miniscule:   _space(miniscule);
+$space-tiny:      	_space(tiny);
+$space-small:       _space(small);
+$space-medium:      _space(medium);
+$space-large:       _space(large);
+$space-huge:     	_space(huge);
+$space-gigantic:	_space(gigantic);
+$space-enormous:    _space(enormous);
+
+$space-inset-default:	_space(inset, default);
+$space-inset-miniscule: _space(inset, miniscule);
+$space-inset-tiny:		_space(inset, tiny);
+$space-inset-small:     _space(inset, small);
+$space-inset-medium:    _space(inset, medium);
+$space-inset-large:     _space(inset, large);
+$space-inset-huge:     	_space(inset, huge);
+$space-inset-gigantic:	_space(inset, gigantic);
+$space-inset-enormous:  _space(inset, enormous);
+
+// breakpoints.yml
+@import 'breakpoints.yml';
+
+@function _breakpoints($keys...) {
+    @return map-deep-get($breakpoints, $keys...)
+}
+
+$breakpoints-xxs-min:    _breakpoints(xxs, min);
+$breakpoints-xxs-max:    _breakpoints(xxs, max);
+$breakpoints-xs-min:     _breakpoints(xs, min);
+$breakpoints-xs-max:     _breakpoints(xs, max);
+$breakpoints-ms-min:     _breakpoints(ms, min);
+$breakpoints-ms-max:     _breakpoints(ms, max);
+$breakpoints-s-min:      _breakpoints(s, min);
+$breakpoints-s-max:      _breakpoints(s, max);
+$breakpoints-m-min:      _breakpoints(m, min);
+$breakpoints-m-max:      _breakpoints(m, max);
+$breakpoints-l-min:      _breakpoints(l, min);
+$breakpoints-l-max:      _breakpoints(l, max);
+$breakpoints-xl-min:     _breakpoints(xl, min);
+$breakpoints-xl-max:     _breakpoints(xl, max);
+
+// typeography.yml
+// exports $colors and $shades
+@import 'typography.yml';
+
+@function _font($keys...) {
+    @return map-deep-get($font, $keys...)
+};
+
+$font-family-body: _font(family, body);
+$font-family-header: _font(family, header);
+$font-family-logo: _font(family, logo);
+
+$font-size-base: _font(size, base);
+
+$font-size-enormous: _font(size, enormous);
+$font-size-gigantic: _font(size, gigantic);
+$font-size-huge: _font(size, huge);
+$font-size-large: _font(size, large);
+$font-size-normal: _font(size, normal);
+$font-size-small: _font(size, small);
+$font-size-tiny: _font(size, tiny);
+$font-size-miniscule: _font(size, miniscule);
+
+$font-line-height-enormous: _font(line-height, enormous);
+$font-line-height-gigantic: _font(line-height, gigantic);
+$font-line-height-huge: _font(line-height, huge);
+$font-line-height-large: _font(line-height, large);
+$font-line-height-normal: _font(line-height, normal);
+$font-line-height-small: _font(line-height, small);
+$font-line-height-tiny: _font(line-height, tiny);
+$font-line-height-miniscule: _font(line-height, miniscule);
+
+// colors.yml
+// exports $colors and $shades
+@import 'colors.yml';
+
+@function _colors($keys...) {
+    @return map-deep-get($colors, $keys...)
+};
+
+@function _shades($keys...) {
+    @return map-deep-get($shades, $keys...)
+};
+
+$color-black:		_shades(black);	
+$color-white:		_shades(white);	
+$color-transparent: transparent;
+
+$color-off-white:	_shades(neutral, lightest);
+$color-alabaster:	_shades(neutral, lighter);
+$color-light-grey:	_shades(neutral, light);
+$color-grey:		_shades(neutral, base);
+$color-dark-grey:	_shades(neutral, dark);
+$color-inverse:		_shades(neutral, darker);
+$color-near-black:	_shades(neutral, darkest);
+
+$color-primary-lightest:	_colors(primary, lightest);
+$color-primary-lighter:		_colors(primary, lighter);
+$color-primary-light:		_colors(primary, light);
+$color-primary:				_colors(primary, base);
+$color-primary-dark:		_colors(primary, dark);
+$color-primary-darker:		_colors(primary, darker);
+$color-primary-darkest:		_colors(primary, darkest);
+
+$color-secondary-lightest:	_colors(secondary, lightest);
+$color-secondary-lighter:	_colors(secondary, lighter);
+$color-secondary-light:		_colors(secondary, light);
+$color-secondary:			_colors(secondary, base);
+$color-secondary-dark:		_colors(secondary, dark);
+$color-secondary-darker:	_colors(secondary, darker);
+$color-secondary-darkest:	_colors(secondary, darkest);
+
+$color-tertiary-lightest:	_colors(tertiary, lightest);
+$color-tertiary-lighter:	_colors(tertiary, lighter);
+$color-tertiary-light:		_colors(tertiary, light);
+$color-tertiary:			_colors(tertiary, base);
+$color-tertiary-dark:		_colors(tertiary, dark);
+$color-tertiary-darker:		_colors(tertiary, darker);
+$color-tertiary-darkest:	_colors(tertiary, darkest);

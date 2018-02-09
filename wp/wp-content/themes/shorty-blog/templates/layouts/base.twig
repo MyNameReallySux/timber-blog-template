@@ -1,0 +1,28 @@
+<!doctype html>
+	<head>
+		{{ include('partials/head.twig') }}
+		{% block head %}{% endblock %}
+	</head>
+
+	<body class="{{body_class}}" data-template="base.twig">
+		{% block header %}
+			{% include 'partials/header.twig' %}
+		{% endblock %}
+
+		<main id="Page_{{ page.title|camelcase }}" class="main-container" role="main">
+			<div id="Main_HeaderSpacer"></div>
+			{% block content %}
+				Sorry, no content
+			{% endblock %}		
+		</main>
+
+		{% block footer %}
+			{% include 'partials/footer.twig' %}
+			{{ function('wp_footer') }}
+		{% endblock %}
+
+		{% block scripts %}
+			{% include 'partials/scripts.twig' %}
+		{% endblock %}
+	</body>
+</html>

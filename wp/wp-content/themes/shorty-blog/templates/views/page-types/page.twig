@@ -1,0 +1,14 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+	<div class="container">
+		<article class="{{post.post_type}}" id="Page{{post.styleID}}">
+			<h1>{{post.title}}</h1>
+			<hr class="break" />
+			<div class="content">
+				{{post.content}}
+			</div>
+			</section>
+		</article>
+	</div>
+{% endblock %}

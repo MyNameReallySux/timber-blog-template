@@ -1,0 +1,54 @@
+colors:
+  info:  
+    base: '#5BBFDD'
+  success:
+    base: '#5AB75D'
+  warning:
+    base: '#EFAC50'
+  danger:
+    base: '#D8524E'
+
+  #######################################
+  # Theme Colors
+  # Picked from http://paletton.com/
+  #######################################
+  primary: 
+    lightest: '#86DBCA'
+    lighter: '#59C2AD'
+    light: '#33AA93'
+    base: '#169F84'
+    dark: '#03856C'
+    darker: '#006954'
+    darkest: '#005242'
+
+  secondary: 
+    lightest: '#85CCDD'
+    lighter: '#59B0C5'
+    light: '#3399B1'
+    base: '#148AA6'
+    dark: '#046F88'
+    darker: '#03576B'
+    darkest: '#014555'
+
+  tertiary: 
+    lightest: '#AB84D4'
+    lighter: '#8A54C1'
+    light: '#7132B2'
+    base: '#5C0DAC'
+    dark: '#460985'
+    darker: '#370669'
+    darkest: '#29034F'
+    
+shades:
+  white: '#fff'
+  black: '#000'
+
+  neutral: 
+    darkest: '#030202'
+    darker: '#373737'
+    dark: '#7A7A7A'
+    base: '#6D6D6D'
+    light: '#9A9A9A'
+    lighter: '#CAC9C9'
+    lightest: '#ebebeb'
+

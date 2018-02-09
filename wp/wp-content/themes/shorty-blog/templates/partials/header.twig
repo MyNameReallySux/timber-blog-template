@@ -1,0 +1,17 @@
+<header id="Header" class="sticky {% if layout.full_header %} full-header{% endif %}" >
+	<div class="top-bar">
+		<div class="top-bar-logo">
+			Chris Coppola
+		</div>
+		<div class="top-bar-content">
+			<nav id="PrimaryNavigation" class="navbar">
+				<div class="nav-menu-toggle">
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+				{% include 'components/menu.twig' with {'menu': menus.primary.items} %}
+			</nav>
+		</div>
+	</div>	
+</header>

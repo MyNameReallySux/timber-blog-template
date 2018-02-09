@@ -1,0 +1,66 @@
+$button_font-family: $font-family-header;
+$button_font-size: $font-size-normal;
+$button_padding: 0 $space-large;
+$button_line-height: 2;
+
+$button-small_font-size: $font-size-small;
+$button-small_padding: 0 $space-default;
+
+.button, .link {
+	display: inline-block;
+	font-family: $button_font-family;
+	font-size: $button_font-size;
+	font-weight: bold;
+	line-height: $button_line-height;
+	padding: $button_padding;
+	text-decoration: none;
+}
+
+.link {
+	@include color($color-black);
+}
+
+.button {
+	@include color($color-white, $color-grey);
+	&:hover {
+		@include color($color-white, $color-light-grey); 
+	}
+
+	&.primary 	{ 
+		@include color($color-white, $color-primary); 
+		&:hover {
+			@include color($color-white, $color-primary-light); 
+		}	 
+	}
+	
+	&.secondary { 
+		@include color($color-white, $color-secondary);
+		&:hover {
+			@include color($color-white, $color-secondary-light); 
+		}	
+	}
+
+	&.tertiary 	{ 
+		@include color($color-white, $color-tertiary);
+		&:hover {
+			@include color($color-white, $color-tertiary-light); 
+		}
+	}
+
+	&.system 	{ @include color($color-white, $color-secondary) }	
+	&.info 		{ @include color($color-white, $color-primary) 	 }
+	&.success 	{ @include color($color-white, $color-tertiary)  }
+	&.warning 	{ @include color($color-white, $color-tertiary)  }
+	&.danger 	{ @include color($color-white, $color-tertiary)  }
+
+	&.disabled 	{ 
+		@include color($color-light-grey, $color-alabaster);
+		cursor: not-allowed;
+	}
+
+	&.small { 
+		font-size: $button-small_font-size;
+		padding: $button-small_padding;
+	}
+	
+}

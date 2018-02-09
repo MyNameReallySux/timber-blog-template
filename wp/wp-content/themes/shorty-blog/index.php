@@ -1,0 +1,33 @@
+<?php
+/**
+ * The main template file
+ * This is the most generic template file in a WordPress theme
+ * and one of the two required files for a theme (the other being style.css).
+ * It is used to display a page when nothing more specific matches a query.
+ * E.g., it puts together the home page when no home.php file exists
+ *
+ * Methods for TimberHelper can be found in the /lib sub-directory
+ *
+ * @package  Beautiful Code
+ * @subpackage  Chris Coppola Blog
+ * @since   Chris Coppola Blog 0.1
+ */
+
+define("REDIRECT_TO_HOME", true);
+
+if(REDIRECT_TO_HOME){
+	$location = get_site_url() . "/home";
+	wp_redirect($location, 301);
+	exit;
+} else {
+	$context = Timber::get_context();
+	$context['posts'] = new Timber\PostQuery();
+	
+	$templates = ['views/index.twig'];
+	if (is_home()) {
+		array_unshift($templates, 'views/index.twig');
+	}
+	
+	Timber::render($templates, $context);
+}
+

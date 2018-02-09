@@ -1,0 +1,10 @@
+#Footer {
+	@include color($color-white, $color-inverse);
+
+	padding: $space-medium $space-tiny;
+
+	hr {
+		border: none;
+		border-top: solid 4px $color-white;
+	}
+}

@@ -1,0 +1,293 @@
+// #############################
+//   Mixins
+// #############################
+
+// Base
+
+@mixin clearfix($direct: after){
+	@if $direct == after or $direct == before {
+		&:#{$direct} {
+			content: "";
+			display: block;
+			width: 100%;
+			clear: both;
+		}
+	} @else {
+		clear: both;
+	}
+}
+
+@mixin show($height: auto, $padding: false, $max: none, $display: false){
+    @if $height != false {
+		height: $height;
+	}
+    pointer-events: all;
+    opacity: 1;
+	max-height: $max;
+	@if $padding != false {
+		padding: $padding;
+	}
+	@if $display != false {
+		display: $display;
+	}
+}
+
+@mixin hide($height: false, $padding: false, $max: none, $display: false){
+    @if $height != false {
+		height: $height;
+	}
+    pointer-events: none;
+    opacity: 0;
+	max-height: $max;
+	@if $padding != false {
+		padding: $padding;
+	}
+	@if $display != false {
+		display: $display;
+	}
+}
+
+// Alignment
+
+@mixin horizontal-align($position: relative){
+    position: $position;
+    top: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%); 
+}
+
+@mixin vertical-align($position: relative){
+    position: $position;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%); 
+}
+
+@mixin center($types ...){
+    $center-map: (
+        "block",
+        "inline",
+        "both",
+        "horizontal",
+        "vertical",
+        "vertical-flex"
+    );
+    
+    $used: ();
+    @each $type in $types {
+        @if not contains($center-map, $type) {
+            @error "#{$type} is not a valid center type.";
+        } @else if contains($used, $type) == true {
+            @error "#{$type} has already been specified once.";
+        } @else if $type == "both" {
+            @include position(absolute 50% 50%);
+            @include transform(translate(-50%, -50%));
+            $used: append($used, "both");
+        } @else if $type == "horizontal" {
+            @include position(absolute 50% 0);
+            @include transform(translateX(-50%));
+        } @else if $type == "vertical" {
+            @include position(absolute 0 50%);
+            @include transform(translateY(-50%));
+        } @else if $type == "vertical-flex" {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+        } @else if $type == "block" {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        } @else if($type == "inline"){
+            text-align: center;
+        } @else {
+            @error "Your center input '#{$type}' is malformed.";
+        }
+    }
+}  
+
+// Compatibility
+
+@mixin border-radius($value){
+    -webkit-border-radius: $value;
+    -moz-border-radius: $value;
+    border-radius: $value;
+}
+
+@mixin transform($value){
+    -webkit-transform: $value;
+	-moz-transform: $value;
+	-ms-transform: $value;
+	-o-transform: $value;
+	transform: $value;
+}
+
+@mixin transition($transition: all 0.4s ease 0s, $values...){
+    $list: append($values, $transition);
+    $value: "";
+	@if length($list) != 0 {
+		@each $attr in $list {
+			@if index($list, $attr) == 1 {
+				$value: #{$attr};
+			} @else {
+				$value: #{$value}, #{$attr};
+			}
+		}	
+	} @else if length($list) == 1{
+		$value: nth($list, 1);
+	} @else {
+        $value: $transition;
+	}
+
+	transition: #{$value};
+	-o-transition: #{$value};
+	-ie-transition: #{$value};
+	-moz-transition: #{$value};
+	-webkit-transition: #{$value};
+}
+
+// CSS Shorthand
+
+@mixin color($color: inherit, $background: false){
+    color: $color;
+    @if $background != false {
+        background-color: $background;
+    }
+}
+
+@mixin pseudo($content: "", $display: block){
+    content: $content;
+    display: $display;
+}
+
+@mixin size($width, $height: $width){
+    width: $width;
+	height: $height;
+}
+
+@mixin position($position){
+    $position-map: (
+        "absolute",
+        "fixed",
+        "relative",
+        "static",
+    );
+    
+    @if(length($position) > 0){
+        $type: nth($position, 1);
+		
+		@if(not contains($position-map, $type)){
+			@error "#{$type} is not a valid position type.";
+		} @else {
+			$top: 0;
+			$right: 0;
+			$bottom: 0;
+			$left: 0;
+
+			$elements: length($position);
+			@if($elements > 1){
+				@if($elements - 1 == 2) {
+					// top left
+					$top: nth($position, 2);
+					$left: nth($position, 3);
+				} @else if($elements - 1 == 4) {
+					// top right bottom left   
+					$top: nth($position, 2);
+					$right: nth($position, 3);
+					$bottom: nth($position, 4);
+					$left: nth($position, 5);
+				} @else {
+					@error "Position values must be in 'top left' or 'top right bottom left' formats.";
+				}
+			}
+			
+			position: $type;
+			@if(not unitless($top))    { top: $top; }
+			@if(not unitless($right))  { right: $right; }
+			@if(not unitless($bottom)) { bottom: $bottom; }
+			@if(not unitless($left))   { left: $left; }
+		}
+	}    
+}
+
+//  Design
+
+@mixin make-background($background-size: cover){
+    background-size: $background-size;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@mixin make-abs-background($background-size: cover){
+    @include make-background($background-size);
+    @include position(absolute 0px 0px);
+    @include size(100%);
+}
+
+@mixin triangle($direction: "up", $color: $black, $border-size: 8px){
+    @if(direction == "up")     { @include triangle-up($color, $border-size)    };
+    @if(direction == "right")  { @include triangle-right($color, $border-size) };
+    @if(direction == "down")   { @include triangle-down($color, $border-size)  };
+    @if(direction == "left")   { @include triangle-left($color, $border-size)  };
+}
+
+@mixin triangle-up($color: $black, $border-size: 8px){
+    border-bottom:  solid $border-size $color;
+    border-left:    solid $border-size transparent;
+    border-right:   solid $border-size transparent;
+}
+
+@mixin triangle-right($color: $black, $border-size: 8px){
+    border-left:     solid $border-size $color;
+    border-top:      solid $border-size transparent;
+    border-bottom:   solid $border-size transparent;
+}
+
+@mixin triangle-down($color: $black, $border-size: 8px){
+    border-top:     solid $border-size $color;
+    border-left:    solid $border-size transparent;
+    border-right:   solid $border-size transparent;
+}
+
+@mixin triangle-left($color: $black, $border-size: 8px){
+    border-right:    solid $border-size $color;
+    border-top:      solid $border-size transparent;
+    border-bottom:   solid $border-size transparent;
+}
+
+@mixin linear-gradient($direction, $color-stops...) {
+	// Direction has been omitted and happens to be a color-stop
+	@if is-direction($direction) == false {
+	  $color-stops: $direction, $color-stops;
+	  $direction: 180deg;
+	}
+  
+	background: nth(nth($color-stops, 1), 1);
+	background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+	background: linear-gradient($direction, $color-stops);
+}
+
+@mixin repeat-rule($width: 100%, $margin-vert: 15px, $margin-side: auto, $include: false){
+    $margin: $margin-vert $margin-side;
+    
+    @if $include == true {
+        &:before {
+            display: block;
+            content: "";
+            width: $width;
+            border-bottom: solid 1px lighten($grey, $b20);
+            margin: $margin; 
+        }   
+    } @else {
+        & + &:before {
+            display: block;
+            content: "";
+            width: $width;
+            border-bottom: solid 1px lighten($grey, $b20);
+            margin: $margin; 
+        }   
+    }
+}
+
+

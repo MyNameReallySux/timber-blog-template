@@ -1,0 +1,30 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+	<div class="container">
+		<article class="{{post.post_type}}" id="Post{{post.styleID}}">
+			<div class="post-header">
+				<div class="post-image">
+					{% if post.thumbnail.src %}
+						<img src="{{post.thumbnail.src|resize(800)}}"/ >
+					{% endif %}
+				</div>
+				<h1 class="post-title">{{post.title}}</h1>
+				<div class="post-info">
+					<div class="post-author"><span>By</span> <a href="{{post.author.path}}">{{ post.author.name }}</a></div>
+					<div class="post-date">{{ post.date }}</div>
+				</div>
+			</div>
+			
+			<div class="post-content">
+				{{post.content}}
+			</div>
+
+			{% include 'components/comments.twig' with {
+				'comments': post.comments,
+				'comment_status': post.comment_status
+			} %}
+		</article>
+	</div>
+{% endblock %}
+

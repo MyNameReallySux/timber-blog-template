@@ -1,0 +1,47 @@
+{% if as_list %} <li class="post"> {% else %} <div class="post"> {% endif %}
+    <div class="post-header">
+        <ul class="post-categories">
+            {% for category in post.categories %}
+                <li class="post-category"><a href="{{category.link}}">{{category}}</a></li>
+            {% endfor %}
+        </ul>
+        <div class="post-title">{{post.title}}</div>
+        <div class="post-attribution">
+            by <div class="post-author">{{post.author}}</div> on <div class="post-date">{{post.date}}</div>
+        </div>
+    </div>
+    <div class="post-content">
+        {% if post.thumbnail.src %}
+            <div class="post-thumbnail">
+                <div class="post-thumbnail-background" style="background-image: url({{post.thumbnail.src|resize(735)}});"></div>
+                <div class="post-thumbnail-overlay">
+                    <a class="overlay-icon" href="{{post.thumbnail.src}}" data-caption="{{post.thumbnail.caption}}" data-lightbox><i class="fa fa-eye"></i></a>
+                    <a class="overlay-icon" href="{{post.link}}"><i class="fa fa-link"></i></a>
+                </div>
+            </div>
+        {% endif %}
+        <div class="content">
+            {{post.content|excerpt(100)}}
+        </div>
+        <div class="post-link-container">
+            <a class="post-link" href="{{post.link}}">Continue Reading</a>
+        </div>
+    </div>
+    <div class="post-footer">
+        <div class="post-comment-count">
+            {{post.comments|length}}
+        </div>
+        <div class="post-tags">
+            <ul class="tag-list">
+                {% for tag in post.tags %}
+                    <li class="tag"><a href="{{tag.link}}">{{tag}}</a></li>
+                {% else %}
+                    <li class="empty-message">
+                        <p>No tags!</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+    </div>
+{% if as_list %} </li> {% else %} </div> {% endif %}

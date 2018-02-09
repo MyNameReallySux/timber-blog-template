@@ -1,0 +1,17 @@
+.about-card {
+    > [class^="about-"] {
+        margin-top: $space-default;
+    }
+}
+
+.about-avatar {
+    width: 100%;
+    padding-bottom: 100%;
+    @include make-background();
+    filter: grayscale(1);
+}
+
+.about-bio {
+    font-size: $font-size-small;
+    line-height: $font-line-height-small;
+}

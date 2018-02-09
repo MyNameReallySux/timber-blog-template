@@ -1,0 +1,22 @@
+breakpoints:
+  xxs:
+    min: 0
+    max: 320px
+  xs:
+    min: 321px
+    max: 480px
+  ms:
+    min: 481px
+    max: 540px
+  s:
+    min: 541px
+    max: 768px
+  m:
+    min: 769px
+    max: 981px
+  l:
+    min: 982px
+    max: 1140px
+  xl:
+    min: 1141px
+    max: -1

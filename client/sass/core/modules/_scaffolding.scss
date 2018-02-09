@@ -1,0 +1,148 @@
+$container-width: 1140px;
+$gutter-width: $space-default;
+$side-padding: ($gutter-width / 2);
+$spacer-height: $space-default;
+
+$max-columns: 12;
+
+@mixin make-container($display: block, $side-padding: $side-padding, $max-width: $container-width){
+    display: $display;
+    max-width: $container-width;    
+    width: 100%;
+	margin: 0 auto;
+	padding: 0 $side-padding;
+}
+
+@mixin make-row($side-padding: $side-padding){
+    display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+    position: relative;
+    margin-left: -$side-padding;
+	margin-right: -$side-padding;
+
+	& + & {
+		margin-top: $spacer-height;
+	}
+	
+	> * {
+		&:before {
+			content: "Needs to be made a column";
+			display: block;
+			@include color($color-black);
+			font-size: $font-size-tiny;
+			text-decoration: underline;
+		}
+	}
+}
+
+@mixin make-group(){
+    display: flex;
+	flex-grow: 1;
+	padding: 0;
+	width: auto;
+}
+
+@mixin make-column(){
+    display: block;
+    position: relative;
+    padding-left: $side-padding;
+	padding-right: $side-padding;
+	@include make-flexable();
+
+	&:before {
+		content: none;
+		font-size: inherit;
+		text-decoration: inherit;
+	}
+}
+
+@mixin make-flexable(){
+	width: auto;
+	flex-grow: 1;
+}
+
+@function get-column-width($span: 1, $columns: $max-columns){
+    @return 100% / ($columns / $span);
+}
+
+@mixin column-span($span: 1, $columns: $max-columns){
+	width: get-column-width($span, $columns);
+	flex-grow: 0;
+}
+
+@mixin make-column-offset($shift, $columns: $max-columns, $size: sm, $class: col){
+	.#{$class}.offset-#{$size}#{$shift} {
+		margin-left: get-column-width($shift, $columns);
+	}
+}
+
+@mixin make-column-push($push, $columns: $max-columns, $size: sm, $class: col){
+	.#{$class}.push-#{$size}#{$push} {
+		left: get-column-width($push, $columns);
+	}
+}
+
+@mixin make-column-pull($pull, $columns: $max-columns, $size: sm, $class: col){
+	.#{$class}.pull-#{$size}#{$pull} {
+		right: get-column-width($pull, $columns);
+	}
+}
+
+@mixin make-column-offsets-for-size($size, $columns: $max-columns, $class: col){
+    $col-widths:();
+    
+    @for $i from 1 through $columns {
+        $offset: 100% / ($columns / $i);
+
+        @if not index($col-widths, $offset) {
+			@include make-column-offset($i, $columns, $size, $class);
+            @include make-column-push($i, $columns, $size, $class);
+			@include make-column-pull($i, $columns, $size, $class);
+
+            $col-widths: append($col-widths, $offset, comma);
+        }   
+    }
+}
+
+@mixin make-columns-for-size($size, $columns: $max-columns, $class: col) {
+    $col-widths:();
+    
+    @for $i from 1 through $columns {
+        $width: get-column-width($i, $columns);
+        @if not index($col-widths, $width) {
+            .#{$class}.#{$size}#{$i} {
+                width: $width;
+                margin-left: 0;
+				@content;
+            }
+
+            $col-widths: append($col-widths, $width, comma);
+        }   
+    }
+}
+
+@mixin make-columns($breakpoints: ("w": ""), $columns: $max-columns, $class: col, $offsets: true){
+	@each $media, $queries in $breakpoints {
+        $size:  map-get($queries, min);
+        
+        @if ($media == '') {
+			@include make-columns-for-size($size, $columns, $class){
+				@content;
+			}
+			@if $offsets == true {
+				@include make-column-offsets-for-size($size, $columns, $class); 
+			}
+            
+        } @else if $media != '' {
+            @include respond-to($size){
+				@include make-columns-for-size($size, $columns, $class){
+					@content;
+				}
+                @if $offsets == true {
+					@include make-column-offsets-for-size($size, $columns, $class); 
+				}
+            }   
+        }
+    }
+}

@@ -1,0 +1,285 @@
+@mixin post-icon($icon, $size: 24px){
+    &:before {
+        @include icon($icon);
+        @include post-icon-style($size);
+    }
+}
+
+@mixin post-icon-style($size: 24px, $font-size: $font-size-small, $line-height: unset){
+    @debug $line-height;
+    @debug $line-height == unset;
+    
+    @if $line-height == unset {
+        $line-height: $size;
+        
+    }
+
+    display: inline-block;
+    margin-right: $space-tiny;
+    @include color($color-dark-grey);
+    @include size($size);
+    
+    position: relative;
+    border: solid 1px $color-alabaster;
+    border-radius: 50%;
+
+    font-size: $font-size;
+    line-height: $line-height;
+    text-align: center;
+}
+
+.post-tags {
+    @include post-icon(tags)
+}
+
+.tag-list {
+    display: inline-block;
+}
+
+.tag {
+    @include color($color-dark-grey, $color-off-white);
+    display: inline-block;
+    text-transform: lowercase;
+    font-size: $font-size-small;
+    padding: $space-miniscule $space-small;
+    border-radius: $space-small;
+    margin-bottom: $space-tiny;
+
+    > a {
+        @include color($color-dark-grey);
+        text-decoration: none;
+    }
+
+    > a:hover {
+        @include color($color-primary-light);
+    }
+}
+
+.post-comment-count {
+    @include post-icon(comments);
+    min-width: 50px;
+}
+
+// Post
+
+.post + .post, .post > [class^="post-"] + [class^="post-"]{
+    margin-top: $space-large;
+}
+
+// Post Sections
+
+.post-header {
+    text-align: center;
+}
+
+.post-content {
+    
+}
+
+.post-footer {
+    border-top: solid 1px $color-alabaster;
+    border-bottom: solid 1px $color-alabaster;
+
+    padding: $space-huge $space-small;
+
+    display: flex;
+    
+    > [class^='post-'] + [class^='post-'] {
+        margin-left: $space-tiny;
+    }
+}
+
+// Post Elements
+
+.post-categories, .post-attribution {
+    font-size: $font-size-small;
+    letter-spacing: 0.05em;
+}
+
+.post-categories {
+    font-family: $font-family-header;    
+    text-transform: uppercase;
+}
+
+.post-category {
+    display: inline-block;
+    width: auto;
+
+    + .post-category:before {
+        @include icon(circle);
+        @include position(relative -2px 0px);
+        font-size: $font-size-miniscule / 2;
+        margin-right: $space-tiny
+    }
+
+    > a {
+        @include color($color-dark-grey);
+        text-decoration: none;
+    }
+
+    > a:hover {
+        @include color($color-primary-light);
+    }
+}
+
+.post-attribution > * {
+    display: inline-block;
+}
+
+.post-title {
+    margin: 0px;
+    font-family: $font-family-logo;
+    font-size: $font-size-gigantic;
+    font-weight: bold;
+}
+
+.post-link-container {
+    text-align: center;
+    margin-top: $space-large;
+}
+
+.post-link {
+    display: inline-block;
+    margin: 0 auto;
+    padding: $space-small $space-large;
+    border-radius: $space-small;
+    border: solid 1px $color-alabaster;
+    font-family: $font-family-header;
+    font-size: $font-size-small;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-decoration: none;
+    @include color($color-dark-grey);
+
+    &:hover {
+        @include color($color-primary-light, rgba($color-primary-lightest, 0.1));
+        border-color: $color-primary-light;
+    }
+
+    &:after {
+        @include icon(angle-double-right);
+        margin-left: $space-tiny;
+    }
+}
+
+.post-thumbnail {
+    width: 100%;
+    padding-bottom: 56.25%;
+    position: relative;
+    margin-bottom: $space-large;
+
+    &:hover .post-thumbnail-overlay {
+        opacity: 1;
+    }
+
+    &:hover .post-thumbnail-background,
+    &:hover .post-thumbnail-overlay {
+        // filter: grayscale(1);
+        animation: color-cycle 8s infinite;
+    }
+}
+
+@keyframes color-cycle {
+    from { filter: hue-rotate(0deg) }
+    to { filter: hue-rotate(360deg) }
+}
+
+
+.post-thumbnail > [class^="post-"]{
+    @include transition();
+}
+
+.post-thumbnail-background {
+    @include make-abs-background;
+}
+
+.post-thumbnail-overlay {
+    opacity: 0;
+    @include make-abs-background;
+    background: rgba($color-white, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > [class^="overlay-"] + [class^="overlay-"]{
+       margin-left: $space-small;
+    }
+}
+
+.overlay-icon {
+    $icon-size: $font-size-gigantic * 3;
+
+    @include color($color-inverse);
+    border: solid 1px $color-transparent;
+    border-radius: 50%;
+    font-size: $icon-size / 2;
+    text-align: center;
+    @include size($icon-size);
+    line-height: $icon-size;
+    
+    &:hover {
+        @include color($color-secondary-light, $color-white);
+    }
+}
+
+.category {
+    + .category {
+        margin-top: $space-tiny;
+    }
+}
+
+.category-count {
+    @include post-icon-style(24px, $line-height: 22px);
+}
+
+.category-link {
+    color: $color-dark-grey;
+    text-decoration: none;
+
+    &:hover {
+        color: $color-primary-light;
+    }
+}
+
+.post-teaser + .post-teaser:before {
+    @include pseudo();
+    border-bottom: solid 1px $color-off-white;
+    margin: $space-small 0;
+}
+
+.post-teaser-title {
+    font-family: $font-family-logo;
+    font-weight: bold;
+    text-decoration: none;
+    @include color($color-black);
+}
+
+.post-teaser-date {
+    @include color($color-dark-grey);
+    font-size: $font-size-small;
+    @include transition();
+}
+
+.post-teaser:hover {
+    > [class^="post-teaser"] {
+        @include color($color-primary-light);
+    }
+}
+
+.latest-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: $space-default;
+}
+
+.project-thumbnail {
+    width: 100%;    
+    padding-bottom: 100%;
+    background-color: $color-primary;
+    @include make-background;
+
+}
+
+.project-title {
+    font-size: $font-size-small;
+}

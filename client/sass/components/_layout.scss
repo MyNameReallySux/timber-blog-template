@@ -1,0 +1,5 @@
+*[id^="Page_"] > section,
+.main-container > section,
+.section {
+	padding: $space-gigantic $space-default;
+}

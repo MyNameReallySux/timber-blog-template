@@ -1,0 +1,21 @@
+space:
+  default: 16px
+  miniscule: 2px
+  tiny: 4px
+  small: 8px
+  medium: 16px
+  large: 24px
+  huge: 32px
+  gigantic: 48px
+  enormous: 64px
+  inset: 
+    default: 16px 16px 16px 16px
+    miniscule: 2px 2px 2px 2px
+    tiny: 4px 4px 4px 4px
+    small: 8px 8px 8px 8px
+    medium: 16px 16px 16px 16px
+    large: 24px 24px 24px 24px
+    huge: 32px 32px 32px 32px
+    gigantic: 48px 48px 48px 48px
+    enormous: 64px 64px 64px 64px
+      

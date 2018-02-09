@@ -1,0 +1,197 @@
+// Media Breakpoints
+// 
+// Size     Min         Max
+// xxs      0           320px
+// xs       321px       480px
+// ms       481px       540px
+// s        541px       768px
+// m        769px       981px
+// l        982px       1140px
+// xl       1141px      Infinity
+
+$breakpoints-map: (
+	xxs: (
+		min: $breakpoints-xxs-min,
+        max: $breakpoints-xxs-max
+	),
+	xs: (
+		min: $breakpoints-xs-min,
+        max: $breakpoints-xs-max
+	),
+	ms: (
+		min: $breakpoints-ms-min,
+        max: $breakpoints-ms-max
+	),
+	s: (
+		min: $breakpoints-s-min,
+        max: $breakpoints-s-max
+	),
+	m: (
+		min: $breakpoints-m-min,
+        max: $breakpoints-m-max
+	),
+	l: (
+		min: $breakpoints-l-min,
+        max: $breakpoints-l-max
+	),
+	lx: (
+		min: $breakpoints-xl-min,
+        max: $breakpoints-xl-max
+	),
+);
+
+$desktop-first: (
+	xxs:    $breakpoints-xxs-max,
+    xs:     $breakpoints-xs-max,
+    ms:     $breakpoints-ms-max,
+    s:      $breakpoints-s-max,
+    m:      $breakpoints-m-max,
+    l:      $breakpoints-l-max,
+    xl:     $breakpoints-xl-max
+);
+
+$mobile-first: (
+    xl:     $breakpoints-xl-min,
+    l:      $breakpoints-l-min,
+    m:      $breakpoints-m-min,
+    s:      $breakpoints-s-min,
+    ms:     $breakpoints-ms-min,
+    xs:     $breakpoints-xs-min,
+    xxs:    $breakpoints-xxs-min
+);
+
+$media-devices: (
+	// Phones
+    small-phone: (
+        min: $breakpoints-xxs-min,
+        max: $breakpoints-xxs-max
+    ),
+    medium-phone: (
+        min: $breakpoints-xs-min,
+        max: $breakpoints-xs-max
+	),
+	large-phone: (
+        min: $breakpoints-ms-min,
+        max: $breakpoints-ms-max
+	),
+	
+	portrait-phone: (
+		min: $breakpoints-xxs-min,
+		max: $breakpoints-xs-max
+	),
+	landscape-phone: (
+		min: $breakpoints-ms-min,
+		max: $breakpoints-s-max
+	),
+
+	// Tablets
+	small-tablet: (
+		min: $breakpoints-s-min,
+		max: $breakpoints-s-max
+	),
+	large-tablet: (
+		min: $breakpoints-m-min,
+		max: $breakpoints-m-max
+	),
+
+	portrait-tablet: (
+		min: $breakpoints-s-min,
+		max: $breakpoints-s-max
+	),
+	landscape-tablet: (
+		min: $breakpoints-m-min,
+		max: $breakpoints-m-max
+	),
+
+	// Desktops
+	small-desktop: (
+		min: $breakpoints-l-min,
+		max: $breakpoints-l-max
+	),
+	large-desktop: (
+		min: $breakpoints-xl-min,
+		max: $breakpoints-xl-max
+	),
+
+	// Devices
+	phone: (
+		min: $breakpoints-xxs-min,
+		max: $breakpoints-ms-max
+	),
+	tablet: (
+		min: $breakpoints-s-min,
+		max: $breakpoints-s-max
+	),
+	mobile: (
+		min: $breakpoints-xxs-min,
+		max: $breakpoints-s-max
+	),
+	desktop: (
+		min: $breakpoints-l-min,
+		max: $breakpoints-xl-max
+	)	
+);
+
+@function get-dimensions-from-size($size, $query){
+	@return map-deep-get($breakpoints-map, $size, $query);
+};
+
+@mixin media-query($from: false, $to: false, $only: false){
+	$ftype: type-of($from);
+	$ttype: type-of($to);
+	$otype: type-of($only);
+	
+	@if $otype == 'string' {
+		$from: get-dimensions-from-size($only, min);
+		$to: get-dimensions-from-size($only, max);
+	} @else {
+		@if $ftype == 'string' {
+			$from: get-dimensions-from-size($from, min)
+		}
+		@if $ttype == 'string' {
+			$to: get-dimensions-from-size($to, max)
+		}
+	}
+	
+	@if $from == 0 { $from: false }
+	@if $to == -1 { $to: false }
+
+	@if $from and $to {
+		@media only screen and (min-width: $from) and (max-width: $to){
+			@content;
+		}
+	} @else if $from {
+		@media only screen and (min-width: $from){
+			@content;
+		}
+	} @else if $to {
+		@media only screen and (max-width: $to){
+			@content;
+		}
+	}
+}
+
+@mixin media-query-for-size($size, $query: min){
+	$valid-queries: (min, max, between);
+
+	$min: map-deep-get($breakpoints-map, $size, min);
+	$max: map-deep-get($breakpoints-map, $size, max);
+
+	@if $query == between {
+		@include media-query(
+			$from: $min,
+			$to: $max
+		){
+			@content;
+		}
+	}
+	@else if $query == min and $min != 0 {
+		@include media-query($from: $min){
+			@content;
+		}
+	} @else if $query == max and max != -1 {
+		@include media-query($to: $max){
+			@content;
+		}
+	}
+}

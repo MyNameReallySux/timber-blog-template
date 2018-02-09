@@ -1,0 +1,67 @@
+[data-child-link] {
+    cursor: pointer;
+}
+
+@keyframes fade-in {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+@keyframes fade-out {
+    from { opacity: 1 }
+    to { opacity: 0 }
+}
+
+
+.lum-lightbox {
+    opacity: 0;
+    z-index: 10;    
+    @include transition();
+}
+
+.lum-lightbox-caption {
+    opacity: 0;
+    font-family: $font-family-body;
+    font-style: italic;
+    color: $color-light-grey;
+}
+
+.lum-lightbox.lum-open, 
+.lum-lightbox.lum-open .lum-lightbox-caption {
+    opacity: 1;
+}
+
+.lum-lightbox.lum-opening, 
+.lum-lightbox.lum-opening .lum-lightbox-caption {
+    animation: fade-in 300ms;
+}
+
+.lum-lightbox.lum-closing,
+.lum-lightbox.lum-closing .lum-lightbox-caption {
+    animation: fade-out 300ms;
+}
+
+.lum-lightbox-inner {
+    background: rgba($color-inverse, 0.9);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg) }
+    to { transform: rotate(360deg) }
+}
+
+.lum-lightbox-loader {
+    display: none;
+    @include center(both);
+
+    &:before {
+        @include icon(spinner);
+        @include color($color-white);
+        font-size: $font-size-enormous;
+        animation: spin steps(16) 1000ms infinite;
+    }
+}
+
+.lum-loading .lum-lightbox-loader {
+    display: block;
+}

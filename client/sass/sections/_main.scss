@@ -1,0 +1,28 @@
+* {
+    font-family: $font-family-body;
+}
+
+body {
+	@include color($color-inverse, $color-off-white)
+}
+
+a {
+	@include transition();
+}
+
+#Page_Container {
+	position: relative;
+	padding: $space-default;
+	z-index: 5;
+	@include make-container;
+}
+
+#Main_HeaderSpacer {
+	height: 73px;
+}
+
+.empty-message {
+	display: inline-block;
+	color: $color-dark-grey;
+	font-style: italic;
+}

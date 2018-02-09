@@ -1,0 +1,90 @@
+{% extends "layouts/base.twig" %}
+
+{% block content %}
+	<section id="Home_Banner">
+		<div class="background" data-parallax></div>
+		<div class="absolute-content">
+		</div>
+	</section>
+	<section id="Home_Main" class="home-main-section">
+		<div class="posts">
+			<ul class="posts-list">
+			{% for post in posts|slice(0, 3) %}
+				{% include 'components/posts/standard.twig' with { 
+					'post': post,
+					'as_list': true
+				 } %}
+			{% else %}
+				<li class="empty-message">
+					<p>No Posts Found!</p>
+				</li>
+			{% endfor %}
+			</ul>
+		</div>
+		<div class="sidebar sidebar-blog">
+			<div class="sidebar-categories">
+				<h5>Categories</h5>
+				<ul class="category-list">
+					{% for category in categories %}
+						<li class="category"><span class="category-count">{{category.count}}</span><a class="category-link"href="{{category.link}}">{{ category.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="sidebar-tags">
+				<h5>Tags</h5>
+				<ul class="tag-list">
+					{% for tag in tags %}
+						<li class="tag"><a class="tag-link" href="{{tag.link}}">{{ tag.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="sidebar-recent-posts">
+				<h5>Recent Posts</h5>
+				{% for post in recent_posts|slice(0, 3) %}
+					<div class="post-teaser" data-child-link>
+						<a href="{{ post.link }}" class="post-teaser-title">{{post.title}}</a>
+						<div class="post-teaser-date">{{post.date}}</div>
+					</div>
+				{% endfor %}
+			</div>
+			<div class="sidebar-latest-projects">
+				<h5>Latest Projects</h5>
+				<div class="latest-projects-grid">
+					{% for project in recent_projects|slice(0, 6) %}
+						<div class="project-teaser" data-child-link>
+							<div class="project-thumbnail" style="background-image: url('{{project.thumbnail.src}}')"></div>
+							<a href="{{project.link}}" class="project-title">{{project.title}}</a>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="sidebar sidebar-personal">
+			<div class="sidebar-about">
+				<h5>About Me</h5>
+				{% if me %}
+					<div class="about-card">
+						<div class="about-avatar" style="background-image: url('{{ me.avatar.high }}')"></div>
+						<div class="about-bio">{{ me.description }}</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+		<div class="posts-footer">
+			<div class="container">
+				<a href="#" class="button">Test</a>
+				<a href="#" class="button primary">Test</a>
+				<a href="#" class="button secondary">Test</a>
+				<a href="#" class="button tertiary">Test</a>
+				<a href="#" class="button disabled">Test</a>
+
+				<a href="#" class="button info">Test</a>
+				<a href="#" class="button question">Test</a>
+				<a href="#" class="button success">Test</a>
+				<a href="#" class="button warning">Test</a>
+				<a href="#" class="button error">Test</a>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+// #############################
+//  Functions
+// #############################
+
+// Strings
+
+@function explode($string,$dem) {
+    $list: ();
+    $sum: str-length($string);
+ 
+    @for $i from 1 through $sum {
+        $str: str-index($string,$dem);
+ 
+        @if str-length($string) >= 1 and $str == null {
+            $list: append($list,$string);
+            $string: '';
+        }
+ 
+        @if type-of($str) == number {
+            $each: str-slice($string,0,($str - 1));
+            $list: append($list,$each);
+            $string: str-slice($string,($str + 1), $sum);
+        }
+    }
+ 
+    @return $list;
+};
+
+// Maps
+
+@function map-depth($map) {
+	$level: 1;
+
+	@each $key, $value in $map {
+		@if type-of($value) == "map" {
+			$level: max(map-depth($value) + 1, $level);
+		}
+	}
+	@return $level;
+};
+
+@function map-deep-get($map, $keys...) {
+	@each $key in $keys {
+		$map: map-get($map, $key);
+	}
+	@return $map;
+};
+
+@function map-deep-set($map, $keys.../*, $value */) {
+	$map-list: ($map,);
+	$result: null;
+
+	@if length($keys) == 2 {
+		@return map-merge($map, (nth($keys, 1): nth($keys, -1)));
+	}
+
+	@for $i from 1 through length($keys) - 2 {
+		$map-list: append($map-list, map-get(nth($map-list, -1), nth($keys, $i)));
+	}
+
+	@for $i from length($map-list) through 1 {
+		$result: map-merge(nth($map-list, $i), (nth($keys, $i): if($i == length($map-list), nth($keys, -1), $result)));
+	}
+
+	@return $result;
+};
+
+@function map-extend($map, $maps.../*, $deep */) {
+	$last: nth($maps, -1);
+	$deep: $last == true;
+	$max: if($deep, length($maps) - 1, length($maps));
+
+	@for $i from 1 through $max {
+		$current: nth($maps, $i);
+
+		@if not $deep {
+			$map: map-merge($map, $current);
+		} @else {
+			@each $key, $value in $current {
+
+			@if type-of($value) == "map" and type-of(map-get($map, $key)) == "map" {
+				$value: map-extend(map-get($map, $key), $value, true);
+			}
+
+			$map: map-merge($map, ($key: $value));
+			}
+		}
+	}
+
+	@return $map;
+};
+
+@function map-get-next($map, $key, $fallback: false) {
+	@if type_of($map) == map {
+		@if map_has_key($map, $key) {
+			$i: 0;
+			$key-index: false;
+
+			@each $map-key, $map-value in $map {
+				$i: $i + 1;
+				@if $map-key == $key {
+					$key-index: $i;
+				}
+				
+				@if $i == $key-index + 1 {
+					@return $map-value;
+				}
+				
+				@if $i == length($map) {
+					@return $fallback;
+				}
+			}
+			@warn 'No next map item for key #{$key}';
+			@return $fallback;
+		}
+		@warn 'No valid key #{$key} in map';
+		@return $fallback;
+	}
+	@warn 'No valid map';
+	@return $fallback;
+};
+
+@function map-has-keys($map, $keys...) {
+	@each $key in $keys {
+		@if not map-has-key($map, $key) {
+			@return false;
+		}
+	}
+	@return true;
+};
+
+@function map-has-nested-keys($map, $keys...) {
+	@each $key in $keys {
+		@if not map-has-key($map, $key) {
+			@return false;
+		}
+		$map: map-get($map, $key);
+	}
+	@return true;
+};
+
+@function map-reverse($map) {
+    $result: null;
+
+    @if type-of($map) == "map" {
+        $keys: map-keys($map);
+        $map-reversed: ();
+        
+        @for $i from length($keys) through 1 {
+            $map-reversed: map-merge(
+                $map-reversed,
+                (nth($keys, $i): map-get($map, nth($keys, $i)))
+            );
+        }
+
+        @if type-of($map-reversed) == "map" {
+            $result: $map-reversed;
+        } @else {
+            @warn 'There was an error reversing the order of "#{$map}"';
+        }
+    } @else {
+        @warn '"#{$map}" is not a valid map';
+    }
+
+    @return $result;
+};
+
+@function map-set($map, $key, $value) {
+	$new: ($key: $value);
+	@return map-merge($map, $new);
+};
+
+@function map-zip($keys, $values) {
+	$l-keys: length($keys);
+	$l-values: length($values);
+	$min: min($l-keys, $l-values);
+	$map: ();
+
+	@if $l-keys != $l-values {
+		@warn "There are #{$l-keys} key(s) for #{$l-values} value(s) in the map for `map-zip`. Resulting map will only have #{$min} pairs.";
+	}
+
+	@if $min == 0 {
+		@return $map;
+	}
+
+	@for $i from 1 through $min {
+		$map: map-merge($map, (nth($keys, $i): nth($values, $i)));
+	}
+
+	@return $map;
+};
+
+// Legacy Support
+
+@function is-direction($value) {
+	$is-keyword: index((to top, to top right, to right top, to right, to bottom right, to right bottom, to bottom, to bottom left, to left bottom, to left, to left top, to top left), $value);
+	$is-angle: type-of($value) == 'number' and index('deg' 'grad' 'turn' 'rad', unit($value));
+  
+	@return $is-keyword or $is-angle;
+}
+
+@function legacy-direction($value) {
+	@if is-direction($value) == false {
+		@error "Cannot convert `#{$value}` to legacy syntax because it doesn't seem to be a direction.";
+	}
+  
+	$conversion-map: (
+		to top          : bottom,
+		to top right    : bottom left,
+		to right top    : left bottom,
+		to right        : left,
+		to bottom right : top left,
+		to right bottom : left top,
+		to bottom       : top,
+		to bottom left  : top right,
+		to left bottom  : right top,
+		to left         : right,
+		to left top     : right bottom,
+		to top left     : bottom right
+	);
+  
+	@if map-has-key($conversion-map, $value) {
+		@return map-get($conversion-map, $value);
+	}
+  
+	@return 90deg - $value;
+  }
