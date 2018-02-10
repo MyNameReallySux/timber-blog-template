@@ -1,22 +1,22 @@
 <?php
 class Controller {
-    static $CONTROLLER_DIR = 'controllers';
-    static function get_controller_dir(){
-        return get_template_directory().'/'.$CONTROLLER_DIR;
-    }
-
     static $views = [];
-    static $model = [];
+    static function get_model(){}
+
     function __construct(){
         $views = static::$views;
-        $model = static::$model;
+        $model = static::get_model();
 
         $views = is_array($views) ? $views : [$views];
 
         $views = $this->init_views($views);
         $model = $this->init_model($model);
 
-        $this->render($views, $models);
+        $this->views = $views;
+        $this->model = $model;
+
+        $this->model = $this->before_render($model);
+        $this->render();
     }
 
     function init_views($views){
@@ -27,16 +27,23 @@ class Controller {
         $context = Timber::get_context();
         if(!is_array($models)){
             $models = ['model' => $models];
-        
         }
         foreach($models as $name => $model){
             if(is_callable($model)){
                 $context[$name] = $model();
+            } else {
+                $context[$name] = $model;
+                
             }
         }
+        return $context;
     }
 
-    function render($views, $model){
-        Timber::render($views, $model);
+    function before_render($model){
+        return $model;
+    }
+
+    function render(){
+        Timber::render($this->views, $this->model);
     }
 }

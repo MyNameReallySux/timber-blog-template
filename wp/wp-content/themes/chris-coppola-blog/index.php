@@ -1,13 +1,15 @@
 <?php
 
-$model = [
-    'post' => new TimberPost()
-];
-
 class HomeController extends Controller {
-    static $views = ['components/home/home.view.twig'];
+    static $views = ['home/home.view.twig'];
+
+    static function get_model(){
+        return [
+            'page' => new TimberPost()
+        ];
+    }
 }
 
-new HomeController()
+new HomeController();
 
 ?>

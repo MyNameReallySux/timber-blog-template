@@ -1,15 +1,32 @@
 <?php
 
+if (!class_exists('Timber')) {
+	add_action('admin_notices', function() {
+		echo '<div class="error"><p>Timber not activated. Make sure you activate the plugin in <a href="' . esc_url(admin_url('plugins.php#timber')) . '">' . esc_url(admin_url('plugins.php') ) . '</a></p></div>';
+	});
+	
+	add_filter('template_include', function($template) {
+		return get_stylesheet_directory() . '/static/no-timber.html';
+	});
+	
+	return;
+}
+
 if(class_exists('TimberSite')){
 	class CustomSite extends TimberSite {
-		function ___construct(){
+		function __construct(){
 			$this->init_theme();
 		}
 	
 		protected function init_theme(){
+			$this->init_timber();
 			$this->add_theme_support();
 			$this->add_filters();
 			$this->add_actions();
+		}
+
+		protected function init_timber(){
+			Timber::$dirname = ['components'];
 		}
 	
 		protected function add_theme_support(){
@@ -20,6 +37,7 @@ if(class_exists('TimberSite')){
 		}
 	
 		protected function add_filters(){
+			print_code("Adding Filters");
 			add_filter('timber_context', [$this, 'add_to_context']);
 			add_filter('get_twig', [$this, 'add_to_twig']);
 		}
@@ -34,6 +52,14 @@ if(class_exists('TimberSite')){
 			foreach($list as $item){
 				add_action($action, [$this, $item]);
 			}
+		}
+
+		protected function add_to_context($context) {
+			$context['site'] = $this;
+			$context['menus'] = [
+				'primary' => new TimberMenu('Primary Navigation')
+			];
+			return $context;
 		}
 	
 		protected function register_scripts() {
@@ -110,6 +136,19 @@ if(class_exists('TimberSite')){
 	
 		function register_admin_styles(){
 	
+		}
+
+		function add_to_twig($twig) {
+			/* this is where you can add your own functions to twig */
+			$twig->addExtension(new Twig_Extension_StringLoader());
+			$twig->addExtension(new Twig_Extension_Debug());
+			$twig->addFilter(new Twig_SimpleFilter('camelcase', [$this, 'filter_camelcase']));
+			return $twig;
+		}
+
+		function filter_camelcase($text) {
+			$text = to_camel_case($text);
+			return $text;
 		}
 	}
 } else {

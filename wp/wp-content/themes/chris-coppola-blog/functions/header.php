@@ -12,17 +12,21 @@ if (!class_exists('Timber')) {
 	return;
 }
 
-Timber::$dirname = ['templates', 'views'];
+Timber::$dirname = ['views', 'components'];
 
-function to_camel_case($str, bool $capital, array $noStrip = []){
+function to_camel_case($str, array $noStrip = []){
+	return lcfirst(to_pascal_case($str, $noStrip));
+}
+
+function to_pascal_case($str, array $noStrip = []){
 	// non-alpha and non-numeric characters become spaces
-	$str = preg_replace('/[^a-z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
+	$str = preg_replace('/[^a-zA-Z0-9' . implode("", $noStrip) . ']+/i', ' ', $str);
 	$str = trim($str);
 	// uppercase the first character of each word
 	$str = ucwords($str);
 	$str = str_replace(" ", "", $str);
 
-	return $capital ? $str : lcfirst($str);
+	return $str;
 }
 
 function print_code($str){

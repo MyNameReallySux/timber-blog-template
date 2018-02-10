@@ -1,0 +1,10 @@
+{
+    "theme": {
+        "name": "Wordpress Starter Template",
+        "dirname": "chris-coppola-blog",
+        "version": "0.0.1"
+    },
+    "env": {
+        "build": "debug"
+    }
+}
