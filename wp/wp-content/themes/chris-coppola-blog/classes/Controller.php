@@ -16,7 +16,7 @@ class Controller {
         $views = $this->init_views($views);
         $model = $this->init_model($model);
 
-        $this->render($views, $models)
+        $this->render($views, $models);
     }
 
     function init_views($views){
